@@ -1,0 +1,2 @@
+MixinConnector: arekkuusu.offhandcombat.common.core.Connector
+TweakClass: org.spongepowered.asm.launch.MixinTweaker

@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "arekkuusu.offhandcombat.mixin",
+  "minVersion": "0.7.5",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.offhandcombat.refmap.json",
+  "target": "@env(DEFAULT)",
+  "client": [
+    "RightClickMixin",
+    "HeldItemMixin",
+    "RenderCrossMixin"
+  ],
+  "mixins": [
+    "PlayerHeldMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

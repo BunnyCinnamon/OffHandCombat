@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+[[mods]]
+modId="offhandcombat"
+version="${file.jarVersion}"
+certificateFingerprint = "72cd337644e68ff7257f69b2927894048793e577"
+displayName="Off Hand Combat"
+authors="Arekkuusu"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/off-hand-combat"
+logoFile="logo.png"
+description="Allows for double handed fighting styles without breaking the combat"
