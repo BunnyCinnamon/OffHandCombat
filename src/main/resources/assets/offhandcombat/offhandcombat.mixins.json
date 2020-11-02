@@ -11,7 +11,8 @@
     "RenderCrossMixin"
   ],
   "mixins": [
-    "PlayerHeldMixin"
+    "PlayerHeldMixin",
+    "SwingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

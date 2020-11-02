@@ -39,6 +39,7 @@ public abstract class RightClickMixin {
                 }
                 if (inputEvent.shouldSwingHand()) {
                     minecraft.player.swingArm(Hand.OFF_HAND);
+                    minecraft.gameSettings.keyBindUseItem.unpressKey();
                 }
                 return;
             }
