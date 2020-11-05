@@ -1,5 +1,6 @@
 package arekkuusu.offhandcombat.common.handler;
 
+import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +31,7 @@ public class OffHandHandler {
         //Reset Swing to half on main hand and full on off hand
         Capabilities.offHand(player).ifPresent(c -> c.ticksSinceLastSwing = 0);
         if (canSwingHand(player, Hand.MAIN_HAND)) {
-            int halfTick = (int) (0.5F * player.getCooldownPeriod());
+            int halfTick = (int) (OHCConfig.Runtime.attackCooldownSetAfterSwing * player.getCooldownPeriod());
             if (ticksSinceLastSwingMain > halfTick) {
                 player.ticksSinceLastSwing = halfTick;
             }

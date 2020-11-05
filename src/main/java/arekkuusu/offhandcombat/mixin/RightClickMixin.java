@@ -1,5 +1,6 @@
 package arekkuusu.offhandcombat.mixin;
 
+import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
 import arekkuusu.offhandcombat.common.handler.OffHandHandler;
 import arekkuusu.offhandcombat.common.network.OHCPacketHandler;
@@ -31,7 +32,7 @@ public abstract class RightClickMixin {
                 } else {
                     Capabilities.offHand(minecraft.player).ifPresent(c -> c.ticksSinceLastSwing = 0);
                     if (OffHandHandler.canSwingHand(minecraft.player, Hand.MAIN_HAND)) {
-                        int halfTick = (int) (0.5F * minecraft.player.getCooldownPeriod());
+                        int halfTick = (int) (OHCConfig.Runtime.attackCooldownSetAfterSwing * minecraft.player.getCooldownPeriod());
                         if (minecraft.player.ticksSinceLastSwing > halfTick) {
                             minecraft.player.ticksSinceLastSwing = halfTick;
                         }

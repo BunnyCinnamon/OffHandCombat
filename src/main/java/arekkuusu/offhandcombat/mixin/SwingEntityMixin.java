@@ -1,23 +1,113 @@
 package arekkuusu.offhandcombat.mixin;
 
+import arekkuusu.offhandcombat.api.capability.Capabilities;
+import arekkuusu.offhandcombat.api.capability.OffHandCapability;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public class SwingEntityMixin {
+public abstract class SwingEntityMixin extends Entity {
 
     @Shadow
     public boolean isSwingInProgress;
     @Shadow
+    public int swingProgressInt;
+    @Shadow
     public Hand swingingHand;
+    public boolean isSwingInProgressPre;
+    public int swingProgressIntPre;
+    public Hand swingingHandPre;
 
-    @Inject(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;isSwingInProgress:Z", value = "FIELD", shift = At.Shift.BEFORE, ordinal = 0))
-    public void isSwingInProgress(Hand p_226292_1_, boolean p_226292_2_, CallbackInfo ci) {
-        this.isSwingInProgress = this.isSwingInProgress && p_226292_1_ == this.swingingHand;
+    public SwingEntityMixin(EntityType<?> entityTypeIn, World worldIn) {
+        super(entityTypeIn, worldIn);
     }
+
+    @SuppressWarnings("ConstantConditions")
+    @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;isSwingInProgress:Z", value = "FIELD", ordinal = 0, opcode = 180))
+    public boolean isSwingInProgress(LivingEntity livingEntity, Hand p_226292_1_) {
+        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        return c != null ? (this.isSwingInProgress ? (this.swingingHand != p_226292_1_ ? c.isSwingInProgress : this.isSwingInProgress) : this.isSwingInProgress) : this.isSwingInProgress;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingProgressInt:I", value = "FIELD", ordinal = 0, opcode = 180))
+    public int isSwingInProgressIntA(LivingEntity livingEntity, Hand p_226292_1_) {
+        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        return c != null ? (this.isSwingInProgress ? (this.swingingHand != p_226292_1_ ? c.swingProgressInt : this.swingProgressInt) : this.swingProgressInt) : this.swingProgressInt;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingProgressInt:I", value = "FIELD", ordinal = 1, opcode = 180))
+    public int isSwingInProgressIntB(LivingEntity livingEntity, Hand p_226292_1_) {
+        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        return c != null ? (this.isSwingInProgress ? (this.swingingHand != p_226292_1_ ? c.swingProgressInt : this.swingProgressInt) : this.swingProgressInt) : this.swingProgressInt;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingProgressInt:I", value = "FIELD", ordinal = 0, opcode = 181))
+    public void setSwingProgressInt(LivingEntity livingEntity, int swingProgressInt, Hand handIn, boolean p_226292_2_) {
+        isSwingInProgressPre = this.isSwingInProgress;
+        swingProgressIntPre = this.swingProgressInt;
+        swingingHandPre = this.swingingHand;
+        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        if(c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
+            c.swingProgressInt = -1;
+        } else {
+            livingEntity.swingProgressInt = swingProgressInt;
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;isSwingInProgress:Z", value = "FIELD", ordinal = 0, opcode = 181))
+    public void setSwingInProgress(LivingEntity livingEntity, boolean isSwingInProgress, Hand handIn, boolean p_226292_2_) {
+        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        if(c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
+            c.isSwingInProgress = true;
+        } else {
+            livingEntity.isSwingInProgress = isSwingInProgress;
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingingHand:Lnet/minecraft/util/Hand;", value = "FIELD", ordinal = 0, opcode = 181))
+    public void setSwingProgressInt(LivingEntity livingEntity, Hand swingingHand, Hand handIn, boolean p_226292_2_) {
+        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        if(c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
+            c.swingingHand = handIn;
+        } else {
+            livingEntity.swingingHand = swingingHand;
+        }
+    }
+
+    @Inject(method = "updateArmSwingProgress()V", at = @At(value = "HEAD"))
+    public void updateArmSwingProgress(CallbackInfo ci) {
+        Capabilities.offHand(this).ifPresent(c -> {
+            int i = this.getArmSwingAnimationEnd();
+            if (c.isSwingInProgress) {
+                ++c.swingProgressInt;
+                if (c.swingProgressInt >= i) {
+                    c.swingProgressInt = 0;
+                    c.isSwingInProgress = false;
+                }
+            } else {
+                c.swingProgressInt = 0;
+            }
+
+            c.prevSwingProgress = c.swingProgress;
+            c.swingProgress = (float) c.swingProgressInt / (float) i;
+        });
+    }
+
+    @Shadow
+    protected abstract int getArmSwingAnimationEnd();
 }

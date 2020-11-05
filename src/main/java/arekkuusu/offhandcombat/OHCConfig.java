@@ -8,9 +8,14 @@ public class OHCConfig {
 
     public static class Common {
 
+        public final ForgeConfigSpec.DoubleValue attackCooldownSetAfterSwing;
+
         public Common(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration settings")
                     .push("server");
+            attackCooldownSetAfterSwing = builder
+                    .comment("")
+                    .defineInRange("attackCooldownSetAfterSwing", 0.5D, 0D, 1D);
             builder.pop();
         }
     }
@@ -52,11 +57,12 @@ public class OHCConfig {
         }
 
         public static void server(final ModConfig config) {
-
+            Runtime.attackCooldownSetAfterSwing = Holder.COMMON.attackCooldownSetAfterSwing.get();
         }
     }
 
     public static final class Runtime {
 
+        public static double attackCooldownSetAfterSwing;
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -20,7 +21,14 @@ import javax.annotation.Nullable;
 
 public class OffHandCapability implements ICapabilitySerializable<CompoundNBT>, Capability.IStorage<OffHandCapability> {
 
+    //Off-hand
     public int ticksSinceLastSwing;
+    //Any-hand
+    public Hand swingingHand;
+    public float swingProgress;
+    public int swingProgressInt;
+    public float prevSwingProgress;
+    public boolean isSwingInProgress;
 
     public static void init() {
         CapabilityManager.INSTANCE.register(OffHandCapability.class, new OffHandCapability(), OffHandCapability::new);

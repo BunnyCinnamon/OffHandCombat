@@ -2,6 +2,7 @@ package arekkuusu.offhandcombat;
 
 import arekkuusu.offhandcombat.api.capability.OffHandCapability;
 import arekkuusu.offhandcombat.common.network.OHCPacketHandler;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -18,8 +19,10 @@ public class OHC {
     //Useful names
     public static final String MOD_ID = "offhandcombat";
     public static final String MOD_NAME = "Off Hand Combat";
-
+    //Logger
     public static final Logger LOG = LogManager.getLogger(MOD_NAME);
+    //Mods that require special handling...
+    public static boolean isTinkers = false;
 
     public OHC() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, OHCConfig.Holder.CLIENT_SPEC);
@@ -28,6 +31,7 @@ public class OHC {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFingerprintViolation);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
+        OHC.isTinkers = ModList.get().isLoaded("tconstruct");
     }
 
     public void setup(final FMLCommonSetupEvent event) {

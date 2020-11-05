@@ -1,5 +1,6 @@
 package arekkuusu.offhandcombat.mixin;
 
+import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
 import arekkuusu.offhandcombat.common.handler.OffHandHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,7 +25,7 @@ public class PlayerHeldMixin {
 
             //Get half tick for offhand
             OffHandHandler.makeActive(player, offhand, mainHand);
-            int halfTick = (int) (0.5F * player.getCooldownPeriod());
+            int halfTick = (int) (OHCConfig.Runtime.attackCooldownSetAfterSwing * player.getCooldownPeriod());
             OffHandHandler.makeInactive(player, offhand, mainHand);
 
             //Set half tick

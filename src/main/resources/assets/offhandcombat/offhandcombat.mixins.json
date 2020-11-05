@@ -8,7 +8,8 @@
   "client": [
     "RightClickMixin",
     "HeldItemMixin",
-    "RenderCrossMixin"
+    "RenderCrossMixin",
+    "ModelSwingMixin"
   ],
   "mixins": [
     "PlayerHeldMixin",
