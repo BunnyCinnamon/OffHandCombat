@@ -29,6 +29,8 @@ public class OffHandCapability implements ICapabilitySerializable<CompoundNBT>, 
     public int swingProgressInt;
     public float prevSwingProgress;
     public boolean isSwingInProgress;
+    public int ticksSinceLastActiveStack;
+    public Hand handOfLastActiveStack;
 
     public static void init() {
         CapabilityManager.INSTANCE.register(OffHandCapability.class, new OffHandCapability(), OffHandCapability::new);

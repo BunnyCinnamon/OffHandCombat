@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class SwingEntityMixin extends Entity {
@@ -60,7 +59,7 @@ public abstract class SwingEntityMixin extends Entity {
         swingProgressIntPre = this.swingProgressInt;
         swingingHandPre = this.swingingHand;
         OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
-        if(c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
+        if (c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
             c.swingProgressInt = -1;
         } else {
             livingEntity.swingProgressInt = swingProgressInt;
@@ -71,7 +70,7 @@ public abstract class SwingEntityMixin extends Entity {
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;isSwingInProgress:Z", value = "FIELD", ordinal = 0, opcode = 181))
     public void setSwingInProgress(LivingEntity livingEntity, boolean isSwingInProgress, Hand handIn, boolean p_226292_2_) {
         OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
-        if(c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
+        if (c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
             c.isSwingInProgress = true;
         } else {
             livingEntity.isSwingInProgress = isSwingInProgress;
@@ -82,7 +81,7 @@ public abstract class SwingEntityMixin extends Entity {
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingingHand:Lnet/minecraft/util/Hand;", value = "FIELD", ordinal = 0, opcode = 181))
     public void setSwingProgressInt(LivingEntity livingEntity, Hand swingingHand, Hand handIn, boolean p_226292_2_) {
         OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
-        if(c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
+        if (c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
             c.swingingHand = handIn;
         } else {
             livingEntity.swingingHand = swingingHand;
@@ -107,6 +106,22 @@ public abstract class SwingEntityMixin extends Entity {
             c.swingProgress = (float) c.swingProgressInt / (float) i;
         });
     }
+
+    @Inject(method = "resetActiveHand()V", at = @At(value = "HEAD"))
+    public void resetActiveHand(CallbackInfo ci) {
+        if (isHandActive()) {
+            Capabilities.offHand(this).ifPresent(c -> {
+                c.ticksSinceLastActiveStack = 0;
+                c.handOfLastActiveStack = getActiveHand();
+            });
+        }
+    }
+
+    @Shadow
+    public abstract boolean isHandActive();
+
+    @Shadow
+    public abstract Hand getActiveHand();
 
     @Shadow
     protected abstract int getArmSwingAnimationEnd();

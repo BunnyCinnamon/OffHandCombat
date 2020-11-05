@@ -3,11 +3,11 @@ package arekkuusu.offhandcombat.common.handler;
 import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.TieredItem;
 import net.minecraft.util.Hand;
 
 public class OffHandHandler {
@@ -44,8 +44,15 @@ public class OffHandHandler {
     }
 
     public static boolean canSwingHand(PlayerEntity player, Hand hand) {
-        Item item = player.getHeldItem(hand).getItem();
-        return item instanceof TieredItem;
+        ItemStack stack = player.getHeldItem(hand);
+        Item item = stack.getItem();
+        return item.getAttributeModifiers(
+                hand == Hand.MAIN_HAND ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND,
+                stack
+        ).containsKey(SharedMonsterAttributes.ATTACK_DAMAGE.getName()) || item.getAttributeModifiers(
+                EquipmentSlotType.MAINHAND,
+                stack
+        ).containsKey(SharedMonsterAttributes.ATTACK_DAMAGE.getName());
     }
 
     public static void makeActive(PlayerEntity playerIn, ItemStack offhand, ItemStack mainHand) {

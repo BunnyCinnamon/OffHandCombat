@@ -15,6 +15,7 @@ public class Events {
     public static void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         Capabilities.offHand(event.getEntity()).ifPresent(capability -> {
             capability.ticksSinceLastSwing++;
+            capability.ticksSinceLastActiveStack++;
         });
     }
 }
