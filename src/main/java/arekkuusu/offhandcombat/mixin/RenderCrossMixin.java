@@ -40,7 +40,7 @@ public abstract class RenderCrossMixin extends AbstractGui {
         if(!OffHandHandler.canSwingHand(player, Hand.OFF_HAND)) return; //YOINK!
         ItemStack mainHand = player.getHeldItemMainhand();
         OffHandHandler.makeActive(player, offhand, mainHand);
-        int ticksSinceLastSwingOff = Capabilities.offHand(player).map(c -> c.ticksSinceLastSwing).orElse(0);
+        int ticksSinceLastSwingOff = Capabilities.offHand(player).lazyMap(c -> c.ticksSinceLastSwing).orElse(0);
         int ticksSinceLastSwingMain = player.ticksSinceLastSwing;
         player.ticksSinceLastSwing = ticksSinceLastSwingOff;
         float f = player.getCooledAttackStrength(0F);
@@ -68,7 +68,7 @@ public abstract class RenderCrossMixin extends AbstractGui {
         if(!OffHandHandler.canSwingHand(player, Hand.OFF_HAND)) return; //YOINK!
         ItemStack mainHand = player.getHeldItemMainhand();
         OffHandHandler.makeActive(player, offhand, mainHand);
-        int ticksSinceLastSwingOff = Capabilities.offHand(player).map(c -> c.ticksSinceLastSwing).orElse(0);
+        int ticksSinceLastSwingOff = Capabilities.offHand(player).lazyMap(c -> c.ticksSinceLastSwing).orElse(0);
         int ticksSinceLastSwingMain = player.ticksSinceLastSwing;
         player.ticksSinceLastSwing = ticksSinceLastSwingOff;
         float f = player.getCooledAttackStrength(0F);

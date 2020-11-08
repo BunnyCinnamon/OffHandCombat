@@ -15,7 +15,7 @@ public class OffHandHandler {
     public static void attackEntity(PlayerEntity player, Entity targetEntity) {
         ItemStack offhand = player.getHeldItemOffhand();
         ItemStack mainHand = player.getHeldItemMainhand();
-        int ticksSinceLastSwingOff = Capabilities.offHand(player).map(c -> c.ticksSinceLastSwing).orElse(0);
+        int ticksSinceLastSwingOff = Capabilities.offHand(player).lazyMap(c -> c.ticksSinceLastSwing).orElse(0);
         int ticksSinceLastSwingMain = player.ticksSinceLastSwing;
 
         //Switch items

@@ -19,7 +19,7 @@ public class PlayerHeldMixin {
         //noinspection ConstantConditions
         PlayerEntity player = (PlayerEntity) ((Object) this);
         if (OffHandHandler.canSwingHand(player, Hand.OFF_HAND)) {
-            int ticksSinceLastSwingOff = Capabilities.offHand(player).map(c -> c.ticksSinceLastSwing).orElse(0);
+            int ticksSinceLastSwingOff = Capabilities.offHand(player).lazyMap(c -> c.ticksSinceLastSwing).orElse(0);
             ItemStack offhand = player.getHeldItemOffhand();
             ItemStack mainHand = player.getHeldItemMainhand();
 
