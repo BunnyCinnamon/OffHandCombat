@@ -3,7 +3,7 @@ package arekkuusu.offhandcombat.common.handler;
 import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -49,22 +49,22 @@ public class OffHandHandler {
         return item.getAttributeModifiers(
                 hand == Hand.MAIN_HAND ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND,
                 stack
-        ).containsKey(SharedMonsterAttributes.ATTACK_DAMAGE.getName()) || item.getAttributeModifiers(
+        ).containsKey(Attributes.field_233823_f_) || item.getAttributeModifiers(
                 EquipmentSlotType.MAINHAND,
                 stack
-        ).containsKey(SharedMonsterAttributes.ATTACK_DAMAGE.getName());
+        ).containsKey(Attributes.field_233823_f_);
     }
 
     public static void makeActive(PlayerEntity playerIn, ItemStack offhand, ItemStack mainHand) {
-        playerIn.getAttributes().removeAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
-        playerIn.getAttributes().removeAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlotType.OFFHAND));
-        playerIn.getAttributes().applyAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
+        playerIn.func_233645_dx_().func_233785_a_(mainHand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
+        playerIn.func_233645_dx_().func_233785_a_(offhand.getAttributeModifiers(EquipmentSlotType.OFFHAND));
+        playerIn.func_233645_dx_().func_233793_b_(offhand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
     }
 
     public static void makeInactive(PlayerEntity playerIn, ItemStack offhand, ItemStack mainHand) {
-        playerIn.getAttributes().removeAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlotType.OFFHAND));
-        playerIn.getAttributes().removeAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
-        playerIn.getAttributes().applyAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
+        playerIn.func_233645_dx_().func_233785_a_(mainHand.getAttributeModifiers(EquipmentSlotType.OFFHAND));
+        playerIn.func_233645_dx_().func_233785_a_(offhand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
+        playerIn.func_233645_dx_().func_233793_b_(mainHand.getAttributeModifiers(EquipmentSlotType.MAINHAND));
     }
 
     public static void setItemStackToSlot(PlayerEntity playerIn, EquipmentSlotType slotIn, ItemStack stack) {

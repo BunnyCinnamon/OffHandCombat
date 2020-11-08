@@ -20,18 +20,21 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(FirstPersonRenderer.class)
 public abstract class HeldItemMixin {
 
     @Shadow
     private float equippedProgressOffHand;
+    @Shadow
+    private ItemStack itemStackOffHand;
     public boolean requipO;
 
-    @Inject(method = "tick()V", at = @At(target = "Ljava/util/Objects;equals(Ljava/lang/Object;Ljava/lang/Object;)Z", value = "INVOKE_ASSIGN", shift = At.Shift.BEFORE, ordinal = 0), locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void getReEquip(CallbackInfo ci, ClientPlayerEntity clientplayerentity, ItemStack itemstack, ItemStack itemstack1, float f, boolean requipM, boolean requipO) {
-        this.requipO = requipO;
+    @Inject(method = "tick()V", at = @At(target = "Lnet/minecraft/client/renderer/FirstPersonRenderer;itemStackOffHand:Lnet/minecraft/item/ItemStack;", value = "FIELD", shift = At.Shift.BEFORE, ordinal = 0))
+    public void getReEquip(CallbackInfo ci) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        ItemStack itemstack1 = player.getHeldItemOffhand();
+        this.requipO = net.minecraftforge.client.ForgeHooksClient.shouldCauseReequipAnimation(this.itemStackOffHand, itemstack1, -1);
     }
 
     @Redirect(method = "tick()V", at = @At(target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", value = "INVOKE", ordinal = 3))
