@@ -24,38 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(FirstPersonRenderer.class)
 public abstract class HeldItemMixin {
 
-    @Shadow
-    private float equippedProgressOffHand;
-    @Shadow
-    private ItemStack itemStackOffHand;
-    public boolean requipO;
-
-    @Inject(method = "tick()V", at = @At(target = "Lnet/minecraft/client/renderer/FirstPersonRenderer;itemStackOffHand:Lnet/minecraft/item/ItemStack;", value = "FIELD", shift = At.Shift.BEFORE, ordinal = 0))
-    public void getReEquip(CallbackInfo ci) {
-        PlayerEntity player = Minecraft.getInstance().player;
-        ItemStack itemstack1 = player.getHeldItemOffhand();
-        this.requipO = net.minecraftforge.client.ForgeHooksClient.shouldCauseReequipAnimation(this.itemStackOffHand, itemstack1, -1);
-    }
-
-    @Redirect(method = "tick()V", at = @At(target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", value = "INVOKE", ordinal = 3))
-    public float tickHand(float num, float min, float max) {
-        PlayerEntity player = Minecraft.getInstance().player;
-        if (player == null) return 1F; //Miss!
-
-        ItemStack offhand = player.getHeldItemOffhand();
-        ItemStack mainHand = player.getHeldItemMainhand();
-        int ticksSinceLastSwingOff = Capabilities.offHand(player).lazyMap(c -> c.ticksSinceLastSwing).orElse(0);
-        int ticksSinceLastSwingMain = player.ticksSinceLastSwing;
-
-        OffHandHandler.makeActive(player, offhand, mainHand);
-        player.ticksSinceLastSwing = ticksSinceLastSwingOff;
-        float f0 = player.getCooledAttackStrength(1F);
-        player.ticksSinceLastSwing = ticksSinceLastSwingMain;
-        OffHandHandler.makeInactive(player, offhand, mainHand);
-
-        return MathHelper.clamp((!requipO ? f0 * f0 * f0 : 0) - this.equippedProgressOffHand, -0.4F, 0.4F);
-    }
-
     @SuppressWarnings("ConstantConditions")
     @ModifyVariable(method = "renderItemInFirstPerson(FLcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer$Impl;Lnet/minecraft/client/entity/player/ClientPlayerEntity;I)V", at = @At(value = "INVOKE_ASSIGN", shift = At.Shift.AFTER), name = "f5")
     public float setMainHandSwing(float f5, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer.Impl bufferIn, ClientPlayerEntity playerEntityIn) {

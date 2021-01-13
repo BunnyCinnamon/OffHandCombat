@@ -7,6 +7,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public final class Capabilities {
 
@@ -19,7 +20,7 @@ public final class Capabilities {
     @CapabilityInject(OffHandCapability.class)
     public static final Capability<OffHandCapability> OFF_HAND = empty();
 
-    public static LazyOptional<OffHandCapability> offHand(@Nullable Entity entity) {
-        return entity != null ? entity.getCapability(OFF_HAND, null) : LazyOptional.empty();
+    public static Optional<OffHandCapability> offHand(@Nullable Entity entity) {
+        return entity != null ? Optional.ofNullable(entity.getCapability(OFF_HAND, null).orElse(null)) : Optional.empty();
     }
 }

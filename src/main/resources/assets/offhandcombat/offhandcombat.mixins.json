@@ -8,6 +8,8 @@
   "client": [
     "RightClickMixin",
     "HeldItemMixin",
+    "ReEquipOptifine",
+    "ReEquipVanilla",
     "RenderCrossMixin",
     "ModelSwingMixin"
   ],
@@ -17,5 +19,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "arekkuusu.offhandcombat.common.core.Plugin"
 }

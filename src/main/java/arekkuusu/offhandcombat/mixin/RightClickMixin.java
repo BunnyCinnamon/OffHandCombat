@@ -60,7 +60,7 @@ public abstract class RightClickMixin {
 
     @ModifyVariable(method = "rightClickMouse()V", at = @At(target = "Lnet/minecraft/item/ItemStack;isEmpty()Z", value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 2), name = "itemstack")
     public ItemStack rightClickMouse(ItemStack itemStack) {
-        return Capabilities.offHand(this.player).lazyMap(c -> {
+        return Capabilities.offHand(this.player).map(c -> {
             Hand hand = this.player.getHeldItem(Hand.MAIN_HAND) == itemStack ? Hand.MAIN_HAND : Hand.OFF_HAND;
             if (c.ticksSinceLastActiveStack < 3 && c.handOfLastActiveStack == hand) {
                 return ItemStack.EMPTY;
