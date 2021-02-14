@@ -17,5 +17,6 @@ public class OHCPacketHandler {
     public static void init() {
         int id = 0;
         INSTANCE.registerMessage(id++, PacketOffHandAttack.class, PacketOffHandAttack::encode, PacketOffHandAttack::decode, PacketOffHandAttack.Handler::handle);
+        INSTANCE.registerMessage(id++, PacketOffHandAttackToggle.class, PacketOffHandAttackToggle::encode, PacketOffHandAttackToggle::decode, PacketOffHandAttackToggle.Handler::handle);
     }
 }

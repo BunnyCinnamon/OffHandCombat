@@ -34,6 +34,7 @@ public class ReEquipOptifine {
     public float tickHand(float num, float min, float max) {
         PlayerEntity player = Minecraft.getInstance().player;
         if (player == null) return 1F; //Miss!
+        if(!OffHandHandler.canUseOffhand(player)) return MathHelper.clamp(num, min, max);
 
         ItemStack offhand = player.getHeldItemOffhand();
         ItemStack mainHand = player.getHeldItemMainhand();

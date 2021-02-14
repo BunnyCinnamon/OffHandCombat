@@ -35,6 +35,7 @@ public abstract class RenderCrossMixin extends AbstractGui {
     public void renderHotBar(float p_194806_1_, MatrixStack p_238443_2_, CallbackInfo ci, PlayerEntity playerentity, ItemStack itemstack, HandSide handside, int i, int j, int k, int l) {
         PlayerEntity player = this.mc.player;
         if (player == null) return; //Miss!
+        if(!OffHandHandler.canUseOffhand(player)) return;
 
         ItemStack offhand = player.getHeldItemOffhand();
         if(!OffHandHandler.canSwingHand(player, Hand.OFF_HAND)) return; //YOINK!
@@ -62,7 +63,8 @@ public abstract class RenderCrossMixin extends AbstractGui {
     @Inject(method = "func_238456_d_(Lcom/mojang/blaze3d/matrix/MatrixStack;)V", at = @At(value = "FIELD", shift = At.Shift.BEFORE, target = "Lnet/minecraft/client/Minecraft;player:Lnet/minecraft/client/entity/player/ClientPlayerEntity;", slice = "Lnet/minecraft/client/settings/AttackIndicatorStatus;CROSSHAIR:Lnet/minecraft/client/settings/AttackIndicatorStatus;"), locals = LocalCapture.CAPTURE_FAILSOFT)
     public void renderCrossHair(MatrixStack p_238456_1_, CallbackInfo ci) {
         PlayerEntity player = this.mc.player;
-        if (player == null) return; //Miss!
+        if (player == null) return; //Miss!!
+        if(!OffHandHandler.canUseOffhand(player)) return;
 
         ItemStack offhand = player.getHeldItemOffhand();
         if(!OffHandHandler.canSwingHand(player, Hand.OFF_HAND)) return; //YOINK!

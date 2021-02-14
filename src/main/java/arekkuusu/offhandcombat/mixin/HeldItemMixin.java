@@ -24,18 +24,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(FirstPersonRenderer.class)
 public abstract class HeldItemMixin {
 
-    @SuppressWarnings("ConstantConditions")
     @ModifyVariable(method = "renderItemInFirstPerson(FLcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer$Impl;Lnet/minecraft/client/entity/player/ClientPlayerEntity;I)V", at = @At(value = "INVOKE_ASSIGN", shift = At.Shift.AFTER), name = "f5")
     public float setMainHandSwing(float f5, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer.Impl bufferIn, ClientPlayerEntity playerEntityIn) {
-        OffHandCapability c = Capabilities.offHand(playerEntityIn).orElse(null);
+        OffHandCapability c = Capabilities.offHand(playerEntityIn).filter(cc -> cc.isActive).orElse(null);
         Hand hand = MoreObjects.firstNonNull(playerEntityIn.swingingHand, Hand.MAIN_HAND);
         return (c != null && c.isSwingInProgress && c.swingingHand == Hand.MAIN_HAND) ? getSwingProgress(c, partialTicks) : hand == Hand.MAIN_HAND ? playerEntityIn.getSwingProgress(partialTicks) : 0F;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @ModifyVariable(method = "renderItemInFirstPerson(FLcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer$Impl;Lnet/minecraft/client/entity/player/ClientPlayerEntity;I)V", at = @At(value = "INVOKE_ASSIGN", shift = At.Shift.AFTER), name = "f6")
     public float setOffHandSwing(float f6, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer.Impl bufferIn, ClientPlayerEntity playerEntityIn) {
-        OffHandCapability c = Capabilities.offHand(playerEntityIn).orElse(null);
+        OffHandCapability c = Capabilities.offHand(playerEntityIn).filter(cc -> cc.isActive).orElse(null);
         Hand hand = MoreObjects.firstNonNull(playerEntityIn.swingingHand, Hand.MAIN_HAND);
         return (c != null && c.isSwingInProgress && c.swingingHand == Hand.OFF_HAND) ? getSwingProgress(c, partialTicks) : hand == Hand.OFF_HAND ? playerEntityIn.getSwingProgress(partialTicks) : 0F;
     }

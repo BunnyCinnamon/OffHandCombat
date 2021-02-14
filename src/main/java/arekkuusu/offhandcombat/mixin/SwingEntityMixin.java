@@ -2,6 +2,7 @@ package arekkuusu.offhandcombat.mixin;
 
 import arekkuusu.offhandcombat.api.capability.Capabilities;
 import arekkuusu.offhandcombat.api.capability.OffHandCapability;
+import arekkuusu.offhandcombat.common.handler.OffHandHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,21 +35,21 @@ public abstract class SwingEntityMixin extends Entity {
     @SuppressWarnings("ConstantConditions")
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;isSwingInProgress:Z", value = "FIELD", ordinal = 0, opcode = 180))
     public boolean isSwingInProgress(LivingEntity livingEntity, Hand p_226292_1_) {
-        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        OffHandCapability c = Capabilities.offHand(livingEntity).filter(cc -> cc.isActive).orElse(null);
         return c != null ? (this.isSwingInProgress ? (this.swingingHand != p_226292_1_ ? c.isSwingInProgress : this.isSwingInProgress) : this.isSwingInProgress) : this.isSwingInProgress;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingProgressInt:I", value = "FIELD", ordinal = 0, opcode = 180))
     public int isSwingInProgressIntA(LivingEntity livingEntity, Hand p_226292_1_) {
-        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        OffHandCapability c = Capabilities.offHand(livingEntity).filter(cc -> cc.isActive).orElse(null);
         return c != null ? (this.isSwingInProgress ? (this.swingingHand != p_226292_1_ ? c.swingProgressInt : this.swingProgressInt) : this.swingProgressInt) : this.swingProgressInt;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingProgressInt:I", value = "FIELD", ordinal = 1, opcode = 180))
     public int isSwingInProgressIntB(LivingEntity livingEntity, Hand p_226292_1_) {
-        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        OffHandCapability c = Capabilities.offHand(livingEntity).filter(cc -> cc.isActive).orElse(null);
         return c != null ? (this.isSwingInProgress ? (this.swingingHand != p_226292_1_ ? c.swingProgressInt : this.swingProgressInt) : this.swingProgressInt) : this.swingProgressInt;
     }
 
@@ -58,7 +59,7 @@ public abstract class SwingEntityMixin extends Entity {
         isSwingInProgressPre = this.isSwingInProgress;
         swingProgressIntPre = this.swingProgressInt;
         swingingHandPre = this.swingingHand;
-        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        OffHandCapability c = Capabilities.offHand(livingEntity).filter(cc -> cc.isActive).orElse(null);
         if (c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
             c.swingProgressInt = -1;
         } else {
@@ -69,7 +70,7 @@ public abstract class SwingEntityMixin extends Entity {
     @SuppressWarnings("ConstantConditions")
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;isSwingInProgress:Z", value = "FIELD", ordinal = 0, opcode = 181))
     public void setSwingInProgress(LivingEntity livingEntity, boolean isSwingInProgress, Hand handIn, boolean p_226292_2_) {
-        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        OffHandCapability c = Capabilities.offHand(livingEntity).filter(cc -> cc.isActive).orElse(null);
         if (c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
             c.isSwingInProgress = true;
         } else {
@@ -80,7 +81,7 @@ public abstract class SwingEntityMixin extends Entity {
     @SuppressWarnings("ConstantConditions")
     @Redirect(method = "swing(Lnet/minecraft/util/Hand;Z)V", at = @At(target = "Lnet/minecraft/entity/LivingEntity;swingingHand:Lnet/minecraft/util/Hand;", value = "FIELD", ordinal = 0, opcode = 181))
     public void setSwingProgressInt(LivingEntity livingEntity, Hand swingingHand, Hand handIn, boolean p_226292_2_) {
-        OffHandCapability c = Capabilities.offHand(livingEntity).orElse(null);
+        OffHandCapability c = Capabilities.offHand(livingEntity).filter(cc -> cc.isActive).orElse(null);
         if (c != null && this.isSwingInProgressPre && this.swingProgressIntPre < this.getArmSwingAnimationEnd() / 2 && this.swingingHandPre != handIn) {
             c.swingingHand = handIn;
         } else {
@@ -90,7 +91,7 @@ public abstract class SwingEntityMixin extends Entity {
 
     @Inject(method = "updateArmSwingProgress()V", at = @At(value = "HEAD"))
     public void updateArmSwingProgress(CallbackInfo ci) {
-        Capabilities.offHand(this).ifPresent(c -> {
+        Capabilities.offHand(this).filter(cc -> cc.isActive).ifPresent(c -> {
             int i = this.getArmSwingAnimationEnd();
             if (c.isSwingInProgress) {
                 ++c.swingProgressInt;
@@ -110,7 +111,7 @@ public abstract class SwingEntityMixin extends Entity {
     @Inject(method = "resetActiveHand()V", at = @At(value = "HEAD"))
     public void resetActiveHand(CallbackInfo ci) {
         if (isHandActive()) {
-            Capabilities.offHand(this).ifPresent(c -> {
+            Capabilities.offHand(this).filter(cc -> cc.isActive).ifPresent(c -> {
                 c.ticksSinceLastActiveStack = 0;
                 c.handOfLastActiveStack = getActiveHand();
             });

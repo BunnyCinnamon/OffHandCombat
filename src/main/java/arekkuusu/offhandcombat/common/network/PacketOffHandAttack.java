@@ -22,7 +22,6 @@ public class PacketOffHandAttack {
         return new PacketOffHandAttack(buf.readVarInt());
     }
 
-
     public static class Handler {
         public static void handle(final PacketOffHandAttack message, final Supplier<NetworkEvent.Context> ctx) {
             if (ctx.get().getDirection().getReceptionSide().isServer()) {

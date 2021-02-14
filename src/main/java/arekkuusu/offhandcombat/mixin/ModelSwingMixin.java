@@ -22,7 +22,7 @@ public abstract class ModelSwingMixin {
 
     @Inject(method = "setRotationAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At(target = "Lnet/minecraft/client/renderer/entity/model/BipedModel;getMainHand(Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/util/HandSide;", value = "INVOKE_ASSIGN", shift = At.Shift.BEFORE, ordinal = 0))
     public void swingHand(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
-        Capabilities.offHand(entityIn).ifPresent(c -> {
+        Capabilities.offHand(entityIn).filter(c -> c.isActive).ifPresent(c -> {
             HandSide handside = this.getMainHand(entityIn);
             ModelRenderer modelrenderer = this.getArmForSide(handside.opposite());
             float f1 = 1.0F - c.swingProgress;

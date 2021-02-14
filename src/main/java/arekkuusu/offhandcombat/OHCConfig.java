@@ -1,5 +1,6 @@
 package arekkuusu.offhandcombat;
 
+import arekkuusu.offhandcombat.api.OFCAPI;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,6 +10,7 @@ public class OHCConfig {
     public static class Common {
 
         public final ForgeConfigSpec.DoubleValue attackCooldownSetAfterSwing;
+        public final ForgeConfigSpec.BooleanValue isOffhandSwingableByDefault;
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration settings")
@@ -16,6 +18,9 @@ public class OHCConfig {
             attackCooldownSetAfterSwing = builder
                     .comment("")
                     .defineInRange("attackCooldownSetAfterSwing", 0.5D, 0D, 1D);
+            isOffhandSwingableByDefault = builder
+                    .comment("")
+                    .define("isOffhandSwing-ableByDefault", true);
             builder.pop();
         }
     }
@@ -58,11 +63,14 @@ public class OHCConfig {
 
         public static void server(final ModConfig config) {
             Runtime.attackCooldownSetAfterSwing = Holder.COMMON.attackCooldownSetAfterSwing.get();
+            Runtime.isOffhandSwingableByDefault = Holder.COMMON.isOffhandSwingableByDefault.get();
+            OFCAPI.isOffhandSwingableByDefault = Runtime.isOffhandSwingableByDefault;
         }
     }
 
     public static final class Runtime {
 
         public static double attackCooldownSetAfterSwing;
+        public static boolean isOffhandSwingableByDefault;
     }
 }

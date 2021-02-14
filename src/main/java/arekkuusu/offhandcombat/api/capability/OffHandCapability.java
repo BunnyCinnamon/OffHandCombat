@@ -1,6 +1,7 @@
 package arekkuusu.offhandcombat.api.capability;
 
 import arekkuusu.offhandcombat.OHC;
+import arekkuusu.offhandcombat.api.OFCAPI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -14,6 +15,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
@@ -31,6 +33,8 @@ public class OffHandCapability implements ICapabilitySerializable<CompoundNBT>, 
     public boolean isSwingInProgress;
     public int ticksSinceLastActiveStack;
     public Hand handOfLastActiveStack;
+    //Toggle
+    public boolean isActive = OFCAPI.isOffhandSwingableByDefault;
 
     public static void init() {
         CapabilityManager.INSTANCE.register(OffHandCapability.class, new OffHandCapability(), OffHandCapability::new);
@@ -56,11 +60,14 @@ public class OffHandCapability implements ICapabilitySerializable<CompoundNBT>, 
     @Nullable
     @Override
     public INBT writeNBT(Capability<OffHandCapability> capability, OffHandCapability instance, Direction side) {
-        return new CompoundNBT();
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putBoolean("isActive", instance.isActive);
+        return nbt;
     }
 
     @Override
     public void readNBT(Capability<OffHandCapability> capability, OffHandCapability instance, Direction side, INBT nbt) {
+        instance.isActive = ((CompoundNBT) nbt).getBoolean("isActive");
     }
 
     public static class Handler {
@@ -70,6 +77,15 @@ public class OffHandCapability implements ICapabilitySerializable<CompoundNBT>, 
         public void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
             if (event.getObject() instanceof PlayerEntity)
                 event.addCapability(KEY, Capabilities.OFF_HAND.getDefaultInstance());
+        }
+
+        @SubscribeEvent
+        public void clonePlayer(PlayerEvent.Clone event) {
+            event.getPlayer().getCapability(Capabilities.OFF_HAND, null).ifPresent(first -> {
+                event.getOriginal().getCapability(Capabilities.OFF_HAND, null).ifPresent(second -> {
+                    first.deserializeNBT(second.serializeNBT());
+                });
+            });
         }
     }
 }

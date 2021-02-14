@@ -2,6 +2,7 @@ package arekkuusu.offhandcombat.mixin;
 
 import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
+import arekkuusu.offhandcombat.api.capability.OffHandCapability;
 import arekkuusu.offhandcombat.common.handler.OffHandHandler;
 import arekkuusu.offhandcombat.common.network.OHCPacketHandler;
 import arekkuusu.offhandcombat.common.network.PacketOffHandAttack;
@@ -28,7 +29,7 @@ public abstract class RightClickMixin {
     @SuppressWarnings("ConstantConditions")
     @Redirect(method = "processKeyBinds()V", at = @At(target = "Lnet/minecraft/client/Minecraft;rightClickMouse()V", value = "INVOKE", ordinal = 0))
     public void processKeyBinds(Minecraft minecraft) {
-        if (!player.isRowingBoat() && !player.isSneaking()) {
+        if (!player.isRowingBoat() && !player.isSneaking() && OffHandHandler.canUseOffhand(player)) {
             net.minecraftforge.client.event.InputEvent.ClickInputEvent inputEvent = net.minecraftforge.client.ForgeHooksClient.onClickInput(1, minecraft.gameSettings.keyBindAttack, Hand.OFF_HAND);
             if (!inputEvent.isCanceled() && minecraft.objectMouseOver.getType() != RayTraceResult.Type.BLOCK && OffHandHandler.canSwingHand(player, Hand.OFF_HAND)) {
                 if (minecraft.objectMouseOver.getType() == RayTraceResult.Type.ENTITY) {
@@ -60,7 +61,7 @@ public abstract class RightClickMixin {
 
     @ModifyVariable(method = "rightClickMouse()V", at = @At(target = "Lnet/minecraft/item/ItemStack;isEmpty()Z", value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 2), name = "itemstack")
     public ItemStack rightClickMouse(ItemStack itemStack) {
-        return Capabilities.offHand(this.player).map(c -> {
+        return Capabilities.offHand(this.player).filter(c -> c.isActive).map(c -> {
             Hand hand = this.player.getHeldItem(Hand.MAIN_HAND) == itemStack ? Hand.MAIN_HAND : Hand.OFF_HAND;
             if (c.ticksSinceLastActiveStack < 3 && c.handOfLastActiveStack == hand) {
                 return ItemStack.EMPTY;

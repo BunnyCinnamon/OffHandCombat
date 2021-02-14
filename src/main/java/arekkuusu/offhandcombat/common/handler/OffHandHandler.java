@@ -2,7 +2,9 @@ package arekkuusu.offhandcombat.common.handler;
 
 import arekkuusu.offhandcombat.OHCConfig;
 import arekkuusu.offhandcombat.api.capability.Capabilities;
+import arekkuusu.offhandcombat.api.capability.OffHandCapability;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -11,6 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
 public class OffHandHandler {
+
+    public static boolean canUseOffhand(LivingEntity player) {
+        OffHandCapability capability = player.getCapability(Capabilities.OFF_HAND, null).orElse(null);
+        return capability != null && capability.isActive;
+    }
 
     public static void attackEntity(PlayerEntity player, Entity targetEntity) {
         ItemStack offhand = player.getHeldItemOffhand();
