@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "cinnamon.ofc.fabric.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "RightClickMixin"
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

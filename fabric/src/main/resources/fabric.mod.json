@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "offhandcombat",
+  "version": "${version}",
+  "name": "Off Hand Combat",
+  "description": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "authors": [
+    "Cinnamon"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/CinnamonBun/off-hand-combat"
+  },
+  "license": "MIT",
+  "icon": "assets/offhandcombat/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cinnamon.ofc.fabric.ModFabric"
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.18",
+    "architectury": ">=3.3.7"
+  },
+  "suggests": {
+    "flamingo": "*"
+  },
+  "mixins": [
+    "offhandcombat.mixins.json",
+    "offhandcombat-common.mixins.json"
+  ],
+  "accessWidener": "offhandcombat.accesswidener"
+}
