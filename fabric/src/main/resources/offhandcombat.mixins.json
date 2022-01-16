@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "cinnamon.ofc.forge.mixin",
+  "package": "cinnamon.ofc.fabric.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
     "RightClickMixin"

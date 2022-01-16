@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerPlayer.class)
-public abstract class PlayerMixin extends Player {
+public abstract class PlayerServerMixin extends Player {
 
-    public PlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
+    public PlayerServerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);
     }
 

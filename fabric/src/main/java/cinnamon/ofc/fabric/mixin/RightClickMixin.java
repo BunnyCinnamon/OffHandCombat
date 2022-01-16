@@ -1,4 +1,4 @@
-package cinnamon.ofc.forge.mixin;
+package cinnamon.ofc.fabric.mixin;
 
 import cinnamon.ofc.Mod;
 import net.minecraft.client.Minecraft;
@@ -16,16 +16,16 @@ public abstract class RightClickMixin {
     @Shadow
     public LocalPlayer player;
 
-    @ModifyVariable(method = "startUseItem()V", at = @At(target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z", value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 1), name = "itemstack")
-    public ItemStack startUseItem(ItemStack itemstack) {
+    @ModifyVariable(method = "startUseItem()V", at = @At(target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z", value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 1), name = "itemStack")
+    public ItemStack startUseItem(ItemStack itemStack) {
         Mod.Data data = Mod.get(this.player);
         if (data.swinging) {
-            InteractionHand hand = this.player.getItemInHand(InteractionHand.MAIN_HAND) == itemstack ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+            InteractionHand hand = this.player.getItemInHand(InteractionHand.MAIN_HAND) == itemStack ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
             if (data.ticksSinceLastActiveStack < 3 && data.handOfLastActiveStack == hand) {
                 return ItemStack.EMPTY;
-            } else return itemstack;
+            } else return itemStack;
         } else {
-            return itemstack;
+            return itemStack;
         }
     }
 }

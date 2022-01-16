@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.Objects;
 
 @Mixin(Minecraft.class)
-public abstract class RightClickMixin {
+public abstract class ClickMixin {
 
     @Shadow
     public LocalPlayer player;
@@ -30,9 +30,9 @@ public abstract class RightClickMixin {
         if (!this.player.isHandsBusy() && !this.player.isCrouching() && HandPlatform.canUseOffhand(player) && HandPlatform.canSwingHand(this.player, InteractionHand.OFF_HAND)) {
             Mod.Data data = Mod.get(this.player);
             if (data.missTime <= 0 && this.hitResult != null) {
-                data.doOverride = true;
                 switch (this.hitResult.getType()) {
                     case ENTITY:
+                        data.doOverride = true;
                         this.gameMode.attack(this.player, ((EntityHitResult) this.hitResult).getEntity());
                         this.player.swing(InteractionHand.OFF_HAND);
                         break;
@@ -47,7 +47,6 @@ public abstract class RightClickMixin {
                         this.player.swing(InteractionHand.OFF_HAND);
                         break;
                 }
-                data.doOverride = false;
             }
         }
         //Fallback

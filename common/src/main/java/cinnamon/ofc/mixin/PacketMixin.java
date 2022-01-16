@@ -1,4 +1,4 @@
-package cinnamon.ofc.forge.mixin;
+package cinnamon.ofc.mixin;
 
 import cinnamon.ofc.Getter;
 import cinnamon.ofc.Mod;

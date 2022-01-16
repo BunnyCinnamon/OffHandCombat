@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public abstract class PlayerHeldMixin extends Entity {
+public abstract class PlayerMixin extends Entity {
 
-    public PlayerHeldMixin(EntityType<?> entityType, Level level) {
+    public PlayerMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 

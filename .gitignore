@@ -1,31 +1,21 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
+build/
+*.ipr
+run/
+*.iws
+out/
+*.iml
+.gradle/
+output/
+bin/
+libs/
+
 .classpath
 .project
-
-# idea
-out
-classes
-*.ipr
-*.iws
-*.iml
-.idea
-
-# gradle
-build
-.gradle
-
-# other
-eclipse
-run
-
-# Files from Forge MDK
-forge*changelog.txt
-
-# Secret files
-keystore.jks
-secrets.properties
-/src/test/
+.idea/
+classes/
+.metadata
+.vscode
+.settings
+*.launch
+/fabric/src/generated/
+/forge/src/generated/
