@@ -27,8 +27,8 @@ public class HandPlatform {
         ItemStack offhand = player.getOffhandItem();
         ItemStack mainHand = player.getMainHandItem();
         Mod.Data data = Mod.get(player);
-        int ticksSinceLastSwingOff = data.swingTime;
-        int ticksSinceLastSwingMain = player.swingTime;
+        int ticksSinceLastSwingOff = data.attackStrengthTicker;
+        int ticksSinceLastSwingMain = player.attackStrengthTicker;
 
         //Switch items
         setItemStackToSlot(player, EquipmentSlot.MAINHAND, offhand);
@@ -36,16 +36,16 @@ public class HandPlatform {
         makeActive(player, offhand, mainHand);
 
         //Swing
-        player.swingTime = ticksSinceLastSwingOff;
+        player.attackStrengthTicker = ticksSinceLastSwingOff;
         player.attack(targetEntity);
-        player.swingTime = ticksSinceLastSwingMain;
+        player.attackStrengthTicker = ticksSinceLastSwingMain;
 
         //Reset Swing to half on main hand and full on off hand
-        data.swingTime = 0;
+        data.attackStrengthTicker = 0;
         if (canSwingHand(player, InteractionHand.MAIN_HAND)) {
             int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
             if (ticksSinceLastSwingMain > halfTick) {
-                player.swingTime = halfTick;
+                player.attackStrengthTicker = halfTick;
             }
         }
 
@@ -57,25 +57,23 @@ public class HandPlatform {
 
     public static void resetAttackStrengthTickerMainHand(Player player) {
         Mod.Data data = Mod.get(player);
-        int ticksSinceLastSwingOff = data.swingTime;
+        int ticksSinceLastSwingOff = data.attackStrengthTicker;
         ItemStack offhand = player.getOffhandItem();
         ItemStack mainHand = player.getMainHandItem();
 
-        //Get half tick for offhand
         HandPlatform.makeActive(player, offhand, mainHand);
         int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
         HandPlatform.makeInactive(player, offhand, mainHand);
 
-        //Set half tick
         if (ticksSinceLastSwingOff > halfTick) {
-            data.swingTime = halfTick;
+            data.attackStrengthTicker = halfTick;
         }
     }
 
     public static void resetAttackStrengthTickerOffHand(Player player) {
         int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
-        if (player.swingTime > halfTick) {
-            player.swingTime = halfTick;
+        if (player.attackStrengthTicker > halfTick) {
+            player.attackStrengthTicker = halfTick;
         }
     }
 
@@ -92,12 +90,14 @@ public class HandPlatform {
         playerIn.getAttributes().removeAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlot.MAINHAND));
         playerIn.getAttributes().removeAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlot.OFFHAND));
         playerIn.getAttributes().addTransientAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlot.MAINHAND));
+        playerIn.getAttributes().addTransientAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlot.OFFHAND));
     }
 
     public static void makeInactive(Player playerIn, ItemStack offhand, ItemStack mainHand) {
         playerIn.getAttributes().removeAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlot.OFFHAND));
         playerIn.getAttributes().removeAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlot.MAINHAND));
         playerIn.getAttributes().addTransientAttributeModifiers(mainHand.getAttributeModifiers(EquipmentSlot.MAINHAND));
+        playerIn.getAttributes().addTransientAttributeModifiers(offhand.getAttributeModifiers(EquipmentSlot.OFFHAND));
     }
 
     public static void setItemStackToSlot(Player playerIn, EquipmentSlot slotIn, ItemStack stack) {

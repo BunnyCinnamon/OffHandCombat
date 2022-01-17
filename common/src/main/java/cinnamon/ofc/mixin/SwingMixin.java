@@ -41,7 +41,7 @@ public abstract class SwingMixin extends Entity {
         if(!HandPlatform.canUseOffhand(livingEntity)) return this.swinging;
 
         Mod.Data data = Mod.get(livingEntity);
-        return swinging ? (swingingArm != interactionHand ? data.swinging : swinging) : swinging;
+        return this.swinging ? (this.swingingArm != interactionHand ? data.swinging : this.swinging) : this.swinging;
     }
 
     @Redirect(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(target = "Lnet/minecraft/world/entity/LivingEntity;swingTime:I", value = "FIELD", ordinal = 0, opcode = 180))
@@ -49,7 +49,7 @@ public abstract class SwingMixin extends Entity {
         if(!HandPlatform.canUseOffhand(livingEntity)) return this.swingTime;
 
         Mod.Data data = Mod.get(livingEntity);
-        return swinging ? (swingingArm != interactionHand ? data.swingTime : swingTime) : swingTime;
+        return this.swinging ? (this.swingingArm != interactionHand ? data.swingTime : this.swingTime) : this.swingTime;
     }
 
     @Redirect(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(target = "Lnet/minecraft/world/entity/LivingEntity;swingTime:I", value = "FIELD", ordinal = 1, opcode = 180))
@@ -57,7 +57,7 @@ public abstract class SwingMixin extends Entity {
         if(!HandPlatform.canUseOffhand(livingEntity)) return this.swingTime;
 
         Mod.Data data = Mod.get(livingEntity);
-        return swinging ? (swingingArm != interactionHand ? data.swingTime : swingTime) : swingTime;
+        return this.swinging ? (this.swingingArm != interactionHand ? data.swingTime : this.swingTime) : this.swingTime;
     }
 
     @Redirect(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(target = "Lnet/minecraft/world/entity/LivingEntity;swingTime:I", value = "FIELD", ordinal = 0, opcode = 181))
@@ -67,9 +67,9 @@ public abstract class SwingMixin extends Entity {
             return;
         }
 
-        swinging_temp = this.swinging;
-        swingTime_temp = this.swingTime;
-        swingingArm_temp = this.swingingArm;
+        this.swinging_temp = this.swinging;
+        this.swingTime_temp = this.swingTime;
+        this.swingingArm_temp = this.swingingArm;
         Mod.Data data = Mod.get(livingEntity);
         if (this.swinging_temp && this.swingTime_temp < this.getCurrentSwingDuration() / 2 && this.swingingArm_temp != interactionHand) {
             data.swingTime = -1;
@@ -96,15 +96,15 @@ public abstract class SwingMixin extends Entity {
     @Redirect(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(target = "Lnet/minecraft/world/entity/LivingEntity;swingingArm:Lnet/minecraft/world/InteractionHand;", value = "FIELD", ordinal = 0, opcode = 181))
     public void setSwingingArm(LivingEntity livingEntity, InteractionHand swingingArm, InteractionHand interactionHand, boolean bl) {
         if(!HandPlatform.canUseOffhand(livingEntity)) {
-            livingEntity.swingingArm = swingingArm;
+            livingEntity.swingingArm = interactionHand;
             return;
         }
 
         Mod.Data data = Mod.get(livingEntity);
         if (this.swinging_temp && this.swingTime_temp < this.getCurrentSwingDuration() / 2 && this.swingingArm_temp != interactionHand) {
-            data.swingingArm = swingingArm;
+            data.swingingArm = interactionHand;
         } else {
-            livingEntity.swingingArm = swingingArm;
+            livingEntity.swingingArm = interactionHand;
         }
     }
 

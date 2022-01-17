@@ -4,11 +4,13 @@
   "compatibilityLevel": "JAVA_16",
   "client": [
     "ClickMixin",
-    "GameModeAttackMixin"
+    "GameModeAttackMixin",
+    "GuiMixin"
   ],
   "mixins": [
     "ListenerImplMixin",
     "ListenerMixin",
+    "ModelMixin",
     "PacketMixin",
     "PlayerMixin",
     "PlayerServerMixin",

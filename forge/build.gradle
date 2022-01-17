@@ -6,6 +6,7 @@ loom {
         mixinConfig "offhandcombat-common.mixins.json"
         mixinConfig "offhandcombat.mixins.json"
     }
+    accessWidenerPath.set(project(":common").file("src/main/resources/offhandcombat.accesswidener"))
 }
 
 architectury {

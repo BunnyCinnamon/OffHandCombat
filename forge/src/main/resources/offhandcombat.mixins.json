@@ -3,7 +3,8 @@
   "package": "cinnamon.ofc.forge.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "RightClickMixin"
+    "RightClickMixin",
+    "HandMixin"
   ],
   "mixins": [
   ],

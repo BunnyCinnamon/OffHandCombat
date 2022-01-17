@@ -19,13 +19,9 @@ public abstract class RightClickMixin {
     @ModifyVariable(method = "startUseItem()V", at = @At(target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z", value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 1), name = "itemStack")
     public ItemStack startUseItem(ItemStack itemStack) {
         Mod.Data data = Mod.get(this.player);
-        if (data.swinging) {
-            InteractionHand hand = this.player.getItemInHand(InteractionHand.MAIN_HAND) == itemStack ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-            if (data.ticksSinceLastActiveStack < 3 && data.handOfLastActiveStack == hand) {
-                return ItemStack.EMPTY;
-            } else return itemStack;
-        } else {
-            return itemStack;
-        }
+        InteractionHand hand = this.player.getItemInHand(InteractionHand.MAIN_HAND) == itemStack ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+        if (data.ticksSinceLastActiveStack < 3 && data.handOfLastActiveStack == hand) {
+            return ItemStack.EMPTY;
+        } else return itemStack;
     }
 }
