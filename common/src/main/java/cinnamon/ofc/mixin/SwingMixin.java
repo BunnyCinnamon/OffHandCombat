@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,11 +37,22 @@ public abstract class SwingMixin extends Entity {
         super(entityType, level);
     }
 
+    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(target = "Lnet/minecraft/world/entity/LivingEntity;swinging:Z", value = "FIELD", ordinal = 0, opcode = 180))
+    public void swing(InteractionHand interactionHand, boolean bl, CallbackInfo ci) {
+        if(!HandPlatform.canUseOffhand(this)) return;
+
+        if(interactionHand == InteractionHand.OFF_HAND) {
+            HandPlatform.resetAttackStrengthTickerOffHand((Player) (Object) this);
+        } else {
+            HandPlatform.resetAttackStrengthTickerMainHand((Player) (Object) this);
+        }
+    }
+
     @Redirect(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(target = "Lnet/minecraft/world/entity/LivingEntity;swinging:Z", value = "FIELD", ordinal = 0, opcode = 180))
     public boolean swinging(LivingEntity livingEntity, InteractionHand interactionHand, boolean bl) {
         if(!HandPlatform.canUseOffhand(livingEntity)) return this.swinging;
 
-        Mod.Data data = Mod.get(livingEntity);
+        Mod.Data data = Mod.get((Player) livingEntity);
         return this.swinging ? (this.swingingArm != interactionHand ? data.swinging : this.swinging) : this.swinging;
     }
 
@@ -48,7 +60,7 @@ public abstract class SwingMixin extends Entity {
     public int swingingTime(LivingEntity livingEntity, InteractionHand interactionHand, boolean bl) {
         if(!HandPlatform.canUseOffhand(livingEntity)) return this.swingTime;
 
-        Mod.Data data = Mod.get(livingEntity);
+        Mod.Data data = Mod.get((Player) livingEntity);
         return this.swinging ? (this.swingingArm != interactionHand ? data.swingTime : this.swingTime) : this.swingTime;
     }
 
@@ -56,7 +68,7 @@ public abstract class SwingMixin extends Entity {
     public int swingingTime_(LivingEntity livingEntity, InteractionHand interactionHand, boolean bl) {
         if(!HandPlatform.canUseOffhand(livingEntity)) return this.swingTime;
 
-        Mod.Data data = Mod.get(livingEntity);
+        Mod.Data data = Mod.get((Player) livingEntity);
         return this.swinging ? (this.swingingArm != interactionHand ? data.swingTime : this.swingTime) : this.swingTime;
     }
 
@@ -70,7 +82,7 @@ public abstract class SwingMixin extends Entity {
         this.swinging_temp = this.swinging;
         this.swingTime_temp = this.swingTime;
         this.swingingArm_temp = this.swingingArm;
-        Mod.Data data = Mod.get(livingEntity);
+        Mod.Data data = Mod.get((Player) livingEntity);
         if (this.swinging_temp && this.swingTime_temp < this.getCurrentSwingDuration() / 2 && this.swingingArm_temp != interactionHand) {
             data.swingTime = -1;
         } else {
@@ -85,7 +97,7 @@ public abstract class SwingMixin extends Entity {
             return;
         }
 
-        Mod.Data data = Mod.get(livingEntity);
+        Mod.Data data = Mod.get((Player) livingEntity);
         if (this.swinging_temp && this.swingTime_temp < this.getCurrentSwingDuration() / 2 && this.swingingArm_temp != interactionHand) {
             data.swinging = true;
         } else {
@@ -100,7 +112,7 @@ public abstract class SwingMixin extends Entity {
             return;
         }
 
-        Mod.Data data = Mod.get(livingEntity);
+        Mod.Data data = Mod.get((Player) livingEntity);
         if (this.swinging_temp && this.swingTime_temp < this.getCurrentSwingDuration() / 2 && this.swingingArm_temp != interactionHand) {
             data.swingingArm = interactionHand;
         } else {
@@ -114,7 +126,7 @@ public abstract class SwingMixin extends Entity {
             return;
         }
 
-        Mod.Data data = Mod.get(this);
+        Mod.Data data = Mod.get((Player) (Object) this);
         int i = this.getCurrentSwingDuration();
         if (data.swinging) {
             ++data.swingTime;
@@ -137,7 +149,7 @@ public abstract class SwingMixin extends Entity {
         }
 
         if (isUsingItem()) {
-            Mod.Data data = Mod.get(this);
+            Mod.Data data = Mod.get((Player) (Object) this);
             data.ticksSinceLastActiveStack = 0;
             data.handOfLastActiveStack = getUsedItemHand();
         }

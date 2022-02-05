@@ -39,12 +39,9 @@ public abstract class ClickMixin {
                     case BLOCK:
                         break;
                     case MISS:
-                        data.attackStrengthTicker = 0;
                         if (Objects.requireNonNull(this.gameMode).hasMissTime()) {
                             data.missTime = 10;
                         }
-
-                        HandPlatform.resetAttackStrengthTickerOffHand(this.player);
                         this.player.swing(InteractionHand.OFF_HAND);
                         break;
                 }

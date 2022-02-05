@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -37,17 +38,20 @@ public abstract class HandMixin {
 
         ItemStack offhand = player.getOffhandItem();
         ItemStack mainHand = player.getMainHandItem();
-        int ticksSinceLastSwingOff = Mod.get(player).attackStrengthTicker;
-        int ticksSinceLastSwingMain = player.attackStrengthTicker;
 
         HandPlatform.makeActive(player, offhand, mainHand);
-        player.attackStrengthTicker = ticksSinceLastSwingOff;
-        float f0 = Mth.clamp(((float) Mod.get(player).attackStrengthTicker + Minecraft.getInstance().getDeltaFrameTime()) / player.getCurrentItemAttackStrengthDelay(), 0.0F, 1.0F);
-        player.attackStrengthTicker = ticksSinceLastSwingMain;
+        double attributeValue = player.getCurrentItemAttackStrengthDelay();
         HandPlatform.makeInactive(player, offhand, mainHand);
+        Mod.Data data = Mod.get(player);
+
+        data.missTime--;
+        data.attackStrengthTicker++;
+        data.ticksSinceLastActiveStack++;
+
+        float f = Mth.clamp(((float) data.attackStrengthTicker) / (float) attributeValue, 0.0F, 1.0F);
 
         boolean reequip = ForgeHooksClient.shouldCauseReequipAnimation(this.offHandItem, offhand, -1);
-        return Mth.clamp((!reequip ? (f0 * f0 * f0) : 0F) - this.offHandHeight, -0.4F, 0.4F);
+        return Mth.clamp((!reequip ? (f * f * f) : 0F) - this.offHandHeight, -0.4F, 0.4F);
     }
 
     @Redirect(method = "renderHandsWithItems", at = @At(target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", value = "INVOKE", ordinal = 0))

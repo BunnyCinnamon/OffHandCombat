@@ -7,8 +7,10 @@ import com.google.gson.JsonPrimitive;
 import com.mojang.authlib.minecraft.client.ObjectMapper;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.event.events.common.TickEvent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import java.io.*;
 import java.util.HashMap;
@@ -25,13 +27,7 @@ public class Mod {
     public static void init() {
         TickEvent.ServerLevelTick.PLAYER_POST.register(instance -> {
             Data data = Mod.get(instance);
-            data.missTime--;
-            data.attackStrengthTicker++;
-            data.ticksSinceLastActiveStack++;
-        });
-        ClientTickEvent.CLIENT_POST.register(instance -> {
-            if (instance.player != null) {
-                Data data = Mod.get(instance.player);
+            if(!instance.isLocalPlayer()) {
                 data.missTime--;
                 data.attackStrengthTicker++;
                 data.ticksSinceLastActiveStack++;
@@ -76,8 +72,8 @@ public class Mod {
         }
     }
 
-    public static Data get(Entity entity) {
-        if (entity.level.isClientSide()) {
+    public static Data get(Player entity) {
+        if (entity.isLocalPlayer()) {
             if (!swingLocal.containsKey(entity.getUUID())) {
                 swingLocal.put(entity.getUUID(), new Data());
             }

@@ -38,9 +38,14 @@ public abstract class HandMixin {
         ItemStack mainHand = player.getMainHandItem();
 
         HandPlatform.makeActive(player, offhand, mainHand);
-        double attributeValue = (1.0 / player.getAttributeValue(Attributes.ATTACK_SPEED) * 20.0);
+        double attributeValue = player.getCurrentItemAttackStrengthDelay();
         HandPlatform.makeInactive(player, offhand, mainHand);
         Mod.Data data = Mod.get(player);
+
+        data.missTime--;
+        data.attackStrengthTicker++;
+        data.ticksSinceLastActiveStack++;
+
         float f = Mth.clamp(((float) data.attackStrengthTicker) / (float) attributeValue, 0.0F, 1.0F);
 
         return Mth.clamp((this.offHandItem == offhand ? f * f * f : 0.0f) - this.offHandHeight, min, max);//Mth.clamp((f0 * f0 * f0) - this.offHandHeight, -0.4F, 0.4F);

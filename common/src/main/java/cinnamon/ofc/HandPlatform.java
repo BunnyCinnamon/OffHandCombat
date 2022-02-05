@@ -56,24 +56,30 @@ public class HandPlatform {
     }
 
     public static void resetAttackStrengthTickerMainHand(Player player) {
-        Mod.Data data = Mod.get(player);
-        int ticksSinceLastSwingOff = data.attackStrengthTicker;
-        ItemStack offhand = player.getOffhandItem();
-        ItemStack mainHand = player.getMainHandItem();
+        if (canSwingHand(player, InteractionHand.OFF_HAND)) {
+            Mod.Data data = Mod.get(player);
+            int ticksSinceLastSwingOff = data.attackStrengthTicker;
+            ItemStack offhand = player.getOffhandItem();
+            ItemStack mainHand = player.getMainHandItem();
 
-        HandPlatform.makeActive(player, offhand, mainHand);
-        int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
-        HandPlatform.makeInactive(player, offhand, mainHand);
+            HandPlatform.makeActive(player, offhand, mainHand);
+            int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
+            HandPlatform.makeInactive(player, offhand, mainHand);
 
-        if (ticksSinceLastSwingOff > halfTick) {
-            data.attackStrengthTicker = halfTick;
+            if (ticksSinceLastSwingOff > halfTick) {
+                data.attackStrengthTicker = halfTick;
+            }
         }
     }
 
     public static void resetAttackStrengthTickerOffHand(Player player) {
-        int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
-        if (player.attackStrengthTicker > halfTick) {
-            player.attackStrengthTicker = halfTick;
+        Mod.Data data = Mod.get(player);
+        data.attackStrengthTicker = 0;
+        if (canSwingHand(player, InteractionHand.MAIN_HAND)) {
+            int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
+            if (player.attackStrengthTicker > halfTick) {
+                player.attackStrengthTicker = halfTick;
+            }
         }
     }
 
