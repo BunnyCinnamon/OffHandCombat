@@ -31,5 +31,5 @@
     "offhandcombat.mixins.json",
     "offhandcombat-common.mixins.json"
   ],
-  "accessWidener": "offhandcombat.accesswidener"
+  "accessWidener": "offhandcombat.accessWidener"
 }

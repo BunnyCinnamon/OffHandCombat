@@ -26,10 +26,11 @@ public abstract class PlayerMixin extends Entity {
     @Inject(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;matches(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z", shift = At.Shift.BEFORE))
     public void resetReEquipAttackStrengthTicker(CallbackInfo ci) {
         Player player = getThis();
-        if (HandPlatform.canUseOffhand(player) && HandPlatform.canSwingHand(player, InteractionHand.OFF_HAND)) {
+        if (HandPlatform.canUseOffhand(player)) {
             ItemStack itemstack = player.getOffhandItem();
             if (!ItemStack.matches(this.lastItemInOffHand, itemstack)) {
-                if (!ItemStack.isSameIgnoreDurability(this.lastItemInOffHand, itemstack)) {
+                if (!ItemStack.isSameIgnoreDurability(this.lastItemInOffHand, itemstack)
+                        && HandPlatform.canSwingHand(player, InteractionHand.OFF_HAND)) {
                     HandPlatform.resetAttackStrengthTickerOffHand(player);
                 }
                 this.lastItemInOffHand = itemstack.copy();
