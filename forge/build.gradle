@@ -6,7 +6,6 @@ loom {
         mixinConfig "offhandcombat-common.mixins.json"
         mixinConfig "offhandcombat.mixins.json"
     }
-    accessWidenerPath.set(project(":common").file("src/main/resources/offhandcombat.accesswidener"))
 }
 
 architectury {
@@ -49,11 +48,15 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier null
+    classifier "forge"
 }
 
 jar {
     classifier "dev"
+}
+
+java {
+    withSourcesJar()
 }
 
 sourcesJar {

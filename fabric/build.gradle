@@ -53,17 +53,21 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier null
+    classifier "fabric"
 }
 
 jar {
     classifier "dev"
 }
 
+java {
+    withSourcesJar()
+}
+
 sourcesJar {
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
+    exclude 'offhandcombat.accesswidener'
 }
 
 components.java {
@@ -86,14 +90,3 @@ publishing {
     }
 }
 
-loom {
-    accessWidenerPath.set(project(":common").file("src/main/resources/offhandcombat.accesswidener"))
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir file("src/generated/resources")
-        }
-    }
-}
