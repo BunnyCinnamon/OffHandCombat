@@ -13,7 +13,8 @@ import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
@@ -28,8 +29,8 @@ public abstract class ClickMixin {
     @Shadow
     public MultiPlayerGameMode gameMode;
 
-    @Redirect(method = "handleKeybinds()V", at = @At(target = "Lnet/minecraft/client/Minecraft;startUseItem()V", value = "INVOKE", ordinal = 0))
-    public void processKeyBinds(Minecraft minecraft) {
+    @Inject(method = "startUseItem", at = @At(value = "HEAD"), cancellable = true)
+    public void startUseItem(CallbackInfo ci) {
         if (!this.player.isHandsBusy() && !this.player.isCrouching() && HandPlatform.canUseOffhand(player) && HandPlatform.canSwingHand(this.player, InteractionHand.OFF_HAND)) {
             Mod.Data data = Mod.get(this.player);
             if (data.missTime <= 0 && this.hitResult != null) {
@@ -49,11 +50,7 @@ public abstract class ClickMixin {
                         break;
                 }
             }
+            ci.cancel();
         }
-        //Fallback
-        startUseItem();
     }
-
-    @Shadow
-    protected abstract void startUseItem();
 }
