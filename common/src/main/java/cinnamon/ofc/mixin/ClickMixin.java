@@ -2,6 +2,8 @@ package cinnamon.ofc.mixin;
 
 import cinnamon.ofc.HandPlatform;
 import cinnamon.ofc.Mod;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 @Mixin(Minecraft.class)
 public abstract class ClickMixin {
 

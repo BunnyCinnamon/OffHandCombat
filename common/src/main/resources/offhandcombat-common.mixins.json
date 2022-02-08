@@ -5,15 +5,16 @@
   "client": [
     "ClickMixin",
     "GameModeAttackMixin",
+    "PacketMixinClient",
+    "ModelMixin",
     "GuiMixin"
   ],
   "mixins": [
     "ListenerImplMixin",
     "ListenerMixin",
-    "ModelMixin",
-    "PacketMixin",
     "PlayerMixin",
     "PlayerServerMixin",
+    "PacketMixinServer",
     "SwingMixin"
   ],
   "injectors": {
