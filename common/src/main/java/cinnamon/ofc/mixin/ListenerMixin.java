@@ -1,6 +1,6 @@
 package cinnamon.ofc.mixin;
 
-import cinnamon.ofc.Setter;
+import cinnamon.ofc.Listener;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -27,8 +27,8 @@ public class ListenerMixin {
 
     @ModifyArg(method = "handleInteract", at = @At(target = "Lnet/minecraft/network/protocol/game/ServerboundInteractPacket;dispatch(Lnet/minecraft/network/protocol/game/ServerboundInteractPacket$Handler;)V", value = "INVOKE"))
     public ServerboundInteractPacket.Handler handleInteract(ServerboundInteractPacket.Handler arg) {
-        ((Setter) arg).setPlayer(this.player);
-        ((Setter) arg).setPacket(this.serverboundInteractPacket);
+        ((Listener) arg).setPlayer(this.player);
+        ((Listener) arg).setPacket(this.serverboundInteractPacket);
         this.serverboundInteractPacket = null;
         return arg;
     }

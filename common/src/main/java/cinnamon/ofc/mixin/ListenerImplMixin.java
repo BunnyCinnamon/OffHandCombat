@@ -1,8 +1,8 @@
 package cinnamon.ofc.mixin;
 
-import cinnamon.ofc.Getter;
+import cinnamon.ofc.Packet;
 import cinnamon.ofc.Mod;
-import cinnamon.ofc.Setter;
+import cinnamon.ofc.Listener;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Dynamic;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net/minecraft/server/network/ServerGamePacketListenerImpl$1")
-public class ListenerImplMixin implements Setter {
+public class ListenerImplMixin implements Listener {
 
     @Unique
     public ServerPlayer player;
@@ -23,7 +23,7 @@ public class ListenerImplMixin implements Setter {
     @Dynamic
     @Inject(method = "onAttack()V", at = @At(target = "Lnet/minecraft/server/level/ServerPlayer;attack(Lnet/minecraft/world/entity/Entity;)V", value = "INVOKE", shift = At.Shift.BEFORE))
     public void onAttack(CallbackInfo ci) {
-        if (((Getter) this.serverboundInteractPacket).get()) {
+        if (((Packet) this.serverboundInteractPacket).get()) {
             Mod.get(this.player).doOverride = true;
             this.player = null;
             this.serverboundInteractPacket = null;
