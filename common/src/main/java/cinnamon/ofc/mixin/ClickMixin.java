@@ -8,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,14 +41,22 @@ public abstract class ClickMixin {
                         data.doOverride = true;
                         this.gameMode.attack(this.player, ((EntityHitResult) this.hitResult).getEntity());
                         this.player.swing(InteractionHand.OFF_HAND);
+                        Minecraft.getInstance().options.keyUse.release();
                         break;
                     case BLOCK:
-                        break;
+                        return;
                     case MISS:
+                        ItemStack stack = this.player.getMainHandItem();
+                        UseAnim useAnimation = stack.getUseAnimation();
+                        if(useAnimation != UseAnim.NONE) {
+                            return;
+                        }
+
                         if (Objects.requireNonNull(this.gameMode).hasMissTime()) {
                             data.missTime = 10;
                         }
                         this.player.swing(InteractionHand.OFF_HAND);
+                        Minecraft.getInstance().options.keyUse.release();
                         break;
                 }
             }

@@ -1,3 +1,4 @@
 accessWidener v1 named
 accessible class net/minecraft/network/protocol/game/ServerboundInteractPacket$Action
 accessible field net/minecraft/world/entity/LivingEntity attackStrengthTicker I
+accessible method net/minecraft/client/KeyMapping release ()V
