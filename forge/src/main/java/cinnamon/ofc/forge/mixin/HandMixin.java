@@ -56,12 +56,12 @@ public abstract class HandMixin {
 
     @Redirect(method = "renderHandsWithItems", at = @At(target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", value = "INVOKE", ordinal = 0))
     public void renderArmWithItemMain(ItemInHandRenderer instance, AbstractClientPlayer f3, float f4, float f9, InteractionHand f13, float f, ItemStack f1, float f2, PoseStack flag1, MultiBufferSource flag2, int i) {
-        this.renderArmWithItem(f3, f4, f9, f13, getMainHandSwing(Minecraft.getInstance().getDeltaFrameTime()), f1, f2, flag1, flag2, i);
+        this.renderArmWithItem(f3, f4, f9, f13, getMainHandSwing(f4), f1, f2, flag1, flag2, i);
     }
 
     @Redirect(method = "renderHandsWithItems", at = @At(target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", value = "INVOKE", ordinal = 1))
     public void renderArmWithItemOff(ItemInHandRenderer instance, AbstractClientPlayer f3, float f4, float f9, InteractionHand f13, float f, ItemStack f1, float f2, PoseStack flag1, MultiBufferSource flag2, int i) {
-        this.renderArmWithItem(f3, f4, f9, f13, getOffHandSwing(Minecraft.getInstance().getDeltaFrameTime()), f1, f2, flag1, flag2, i);
+        this.renderArmWithItem(f3, f4, f9, f13, getOffHandSwing(f4), f1, f2, flag1, flag2, i);
     }
 
     public float getMainHandSwing(float partial) {
