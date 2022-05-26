@@ -6,15 +6,16 @@
   "refmap": "mixins.offhandcombat.refmap.json",
   "target": "@env(DEFAULT)",
   "client": [
-    "RightClickMixin",
     "HeldItemMixin",
+    "ModelSwingMixin",
     "ReEquipOptifine",
     "ReEquipVanilla",
     "RenderCrossMixin",
-    "ModelSwingMixin"
+    "RightClickMixin"
   ],
   "mixins": [
     "PlayerHeldMixin",
+    "PlayerMixin",
     "SwingEntityMixin"
   ],
   "injectors": {
