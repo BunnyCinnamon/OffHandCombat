@@ -43,7 +43,7 @@ public class GuiMixin extends GuiComponent {
         if (!HandPlatform.canUseOffhand(player)) return;
         if (!HandPlatform.canSwingHand(player, InteractionHand.OFF_HAND)) return;
 
-        if (this.minecraft.options.attackIndicator == AttackIndicatorStatus.HOTBAR) {
+        if (this.minecraft.options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
             float g = this.getAttackStrengthScale(player);
             if (g < 1.0F) {
                 int k2 = this.screenHeight - 20;
@@ -64,7 +64,7 @@ public class GuiMixin extends GuiComponent {
         if (!HandPlatform.canUseOffhand(player)) return;
         if (!HandPlatform.canSwingHand(player, InteractionHand.OFF_HAND)) return;
 
-        if (this.minecraft.options.attackIndicator == AttackIndicatorStatus.CROSSHAIR) {
+        if (this.minecraft.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
             float g = this.getAttackStrengthScale(player);
             boolean flag = false;
             if (this.minecraft.crosshairPickEntity != null && this.minecraft.crosshairPickEntity instanceof LivingEntity && g >= 1.0F) {

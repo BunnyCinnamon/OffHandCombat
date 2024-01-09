@@ -7,7 +7,7 @@ dependencies {
 }
 
 architectury {
-    common()
+    common(rootProject.enabled_platforms.split(","))
 }
 
 java {
@@ -15,13 +15,5 @@ java {
 }
 
 loom {
-    accessWidenerPath.set(file("src/main/resources/offhandcombat.accessWidener"))
-}
-
-afterEvaluate {
-    tasks {
-        remapJar {
-            remapAccessWidener.set(false)
-        }
-    }
+    accessWidenerPath = file("src/main/resources/offhandcombat.accessWidener")
 }
