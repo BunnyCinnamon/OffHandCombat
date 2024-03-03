@@ -28,7 +28,7 @@ public class ListenerImplMixin implements Listener {
         if (((Packet) this.serverboundInteractPacket).get()) {
             Mod.Data data = Mod.get(this.player);
             if(data.attackStrengthTicker <= 5 || player.attackStrengthTicker <= 5) {
-                Entity target = this.serverboundInteractPacket.getTarget(this.player.getLevel());
+                Entity target = this.serverboundInteractPacket.getTarget(this.player.serverLevel());
                 if (target != null) {
                     target.invulnerableTime = 0;
                     if(target instanceof LivingEntity) {

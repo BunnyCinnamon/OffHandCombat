@@ -43,17 +43,12 @@ shadowJar {
     exclude "offhandcombat.accessWidener"
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    archiveClassifier = "dev-shadow"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "forge"
-}
-
-jar {
-    classifier "dev"
 }
 
 java {

@@ -29,7 +29,7 @@ public abstract class PlayerMixin extends Entity {
         if (HandPlatform.canUseOffhand(player)) {
             ItemStack itemstack = player.getOffhandItem();
             if (!ItemStack.matches(this.lastItemInOffHand, itemstack)) {
-                if (!ItemStack.isSameIgnoreDurability(this.lastItemInOffHand, itemstack)
+                if (!ItemStack.isSameItem(this.lastItemInOffHand, itemstack)
                         && HandPlatform.canSwingHand(player, InteractionHand.OFF_HAND)) {
                     HandPlatform.resetAttackStrengthTickerOffHand(player);
                 }
